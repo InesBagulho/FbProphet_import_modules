@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import json
-from db_connector import DB
+from FbProphet_import_modules.db_connector import DB
 
 class DataPrep:
     """ Takes all actions performed on Data """
