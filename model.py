@@ -7,7 +7,7 @@ from fbprophet import Prophet
 from datetime import date
 from datetime import datetime
 from azureml.core.model import Model
-from azureMLServices import AML
+from FbProphet_import_modules.azureMLServices import AML
 
 class FBModel:
     """ Takes all actions performed to train, save and register the model """
