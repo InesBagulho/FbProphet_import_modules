@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from datetime import timedelta
 from datetime import date
-from db_connector import DB
+from FbProphet_import_modules.db_connector import DB
 import matplotlib.pyplot as plt
 
 class Output:
