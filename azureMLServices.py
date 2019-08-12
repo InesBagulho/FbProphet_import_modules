@@ -32,7 +32,7 @@ class AML:
     
         """
         ws = Workspace.get(name = self.ml_services_name, subscription_id = self.subscription_id, 
-                           resource_group = self.resource_group_name = self.mls_client)
+                           resource_group = self.resource_group_name, auth = self.mls_client)
         
         return ws
     
