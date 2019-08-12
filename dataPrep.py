@@ -31,14 +31,14 @@ class DataPrep:
         
         db = DB(db_type=self.db_type)
         
-        query = """SET DATEFIRST 1; 
-                SELECT o.delivery_year,o.delivery_week,o.company_id,
+        query = """
+                (SELECT o.delivery_year,o.delivery_week
                 CAST([crm].[find_first_day_of_week](o.delivery_year, o.delivery_week) as varchar) as [ds],
                 COUNT(*) as [y] 
                 FROM mb.orders o 
                 WHERE o.company_id = {} AND o.delivery_year >= 2015 
-                GROUP BY o.delivery_year,o.delivery_week,o.company_id 
-                ORDER BY o.delivery_year ,o.delivery_week ,o.company_id"""
+                GROUP BY o.delivery_year,o.delivery_week) orders_alias 
+                """
         
         if self.company == 'Godtlevert':
             self.company_id = "'09ECD4F0-AE58-4539-8E8F-9275B1859A19'"
@@ -53,7 +53,8 @@ class DataPrep:
         
         query = query.format(self.company_id)
 
-        self.d = pd.read_sql(query, db.conn)
+        self.d = spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
+        self.d.orderBy("delivery_year","delivery_week")
         self.d['ds'] = pd.to_datetime(self.d['ds'])
 
 
