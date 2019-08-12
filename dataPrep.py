@@ -48,6 +48,7 @@ class DataPrep:
 
         self.d = spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
         self.d.orderBy("delivery_year","delivery_week")
+        self.d = self.d.toPandas()
         self.d['ds'] = pd.to_datetime(self.d['ds'])
 
 
