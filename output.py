@@ -6,7 +6,7 @@ from datetime import date
 from FbProphet_import_modules.db_connector import DB
 import matplotlib.pyplot as plt
 
-class Output:
+class OutputPrep:
     """ Create and write output predictions. Compute training and test prediction errors. """
 
     def __init__(self, model, d_train, d_test, df):
