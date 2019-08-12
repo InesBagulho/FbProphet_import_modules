@@ -1,5 +1,7 @@
 import json
 from azureml.core import Workspace
+from azureml.core.authentication import ServicePrincipalAuthentication
+
 
 class AML:
     """ Takes all actions associated with Azure ML Services """
@@ -16,6 +18,14 @@ class AML:
         self.ml_services_name = self.ml_services["ml_services_name"]
         self.region = self.ml_services["region"]
         self.compute_target = data["aml_compute_target"]
+        aad_client_definitions = data["active_directory_client"]
+        
+        mls_client = ServicePrincipalAuthentication(tenant_id=aad_client_definitions['tenant_id'],
+                                                    service_principal_id=aad_client_definitions['client_id'],
+                                                    service_principal_password=aad_client_definitions['client_secret'])
+        
+        self.headers = mls_client.get_authentication_header()
+
 
         
     def get_workspace(self):
