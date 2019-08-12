@@ -20,20 +20,18 @@ class DB:
 
         with open(DB_SETTINGS) as filename:
             conf = json.load(filename)
+        
+        jdbcHostname = conf["host"]
+        jdbcDatabase = conf["dbname"]
+        jdbcPort = conf["port"]
+        jdbcUsername = conf["user"]
+        jdbcPassword = conf["passw"]
+        jdbcDriver = conf["driver"]
 
-        conn_str = 'DATABASE={{{}}};UID={{{}}};SERVER={{{}}};PORT={{{}}};PWD={{{}}}'.format(
-            conf['dbname'], conf['user'], conf['host'], conf['port'],
-            conf['passw']
-        )
+        self.jdbcUrl = "jdbc:sqlserver://{0}:{1};database={2}".format(jdbcHostname, jdbcPort, jdbcDatabase)
 
-        self.conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'+conn_str)
-        self.cur = self.conn.cursor()
-
-    def close(self):
-        """ Closes the connection """
-        self.cur.close()
-        self.conn.close()
-
-    def commit(self):
-        """ Commits a change in the db """
-        self.conn.commit()
+        self.connectionProperties = {
+            "user" : jdbcUsername,
+            "password" : jdbcPassword,
+            "driver" : jdbcDriver
+        }
