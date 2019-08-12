@@ -6,7 +6,7 @@ from datetime import date
 from FbProphet_import_modules.db_connector import DB
 import matplotlib.pyplot as plt
 
-class OutputPrep:
+class Output:
     """ Create and write output predictions. Compute training and test prediction errors. """
 
     def __init__(self, model, d_train, d_test, df):
@@ -134,17 +134,12 @@ class OutputPrep:
         update_data = [x.tolist() for x in update_output.values]
         
         db = DB(db_type=self.db_type)
-        
-        query = "(IF EXISTS(SELECT * FROM ml.order_forecast WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ) UPDATE ml.order_forecast SET run_timestamp = ?, forecast = ? WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ELSE INSERT INTO ml.order_forecast(company_id, year, week, run_timestamp, forecast, current_week, current_year) VALUES (?, ?, ?, ?, ?, ?, ?)) result_alias", update_data)
-        spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
+        for data in update_data:
+            query = "(IF EXISTS(SELECT * FROM ml.order_forecast WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ) UPDATE ml.order_forecast SET run_timestamp = ?, forecast = ? WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ELSE INSERT INTO ml.order_forecast(company_id, year, week, run_timestamp, forecast, current_week, current_year) VALUES (?, ?, ?, ?, ?, ?, ?)) result_alias", data)
+            spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
 
         
         self.model.plot(self.pred_trans)
         plt.plot(self.df['ds'], self.df['y'], 'k.')
         plt.show()
-        
-        
-            
-    
-
-    
+       
