@@ -128,14 +128,14 @@ class Output:
         """ Write the output data to the DataBase
         
         """
-        update_output = self.fcst_output[['company_id', 'year', 'week', 'current_week', 'current_year', 'run_timestamp', 'forecast', 'company_id', 'year', 'week', 'current_week', 'current_year', 'company_id', 'year', 'week', 'run_timestamp', 'forecast', 'current_week', 'current_year',]]
+        update_output = self.fcst_output[['company_id', 'year', 'week', 'current_week', 'current_year', 'run_timestamp', 'forecast']]
 
         # Write to db table
         update_data = [x.tolist() for x in update_output.values]
         
         db = DB(db_type=self.db_type)
         for data in update_data:
-            query = "(IF EXISTS(SELECT * FROM ml.order_forecast WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ) UPDATE ml.order_forecast SET run_timestamp = ?, forecast = ? WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ELSE INSERT INTO ml.order_forecast(company_id, year, week, run_timestamp, forecast, current_week, current_year) VALUES (?, ?, ?, ?, ?, ?, ?)) result_alias", data)
+            query = ('(IF EXISTS(SELECT * FROM ml.order_forecast WHERE company_id = {0}  AND year = {1} AND week = {2} AND current_week = {3} AND current_year = {4} ) UPDATE ml.order_forecast SET run_timestamp = {5}, forecast = {6} WHERE company_id = {0}  AND year = {1} AND week = {2} AND current_week = {3} AND current_year = {4} ELSE INSERT INTO ml.order_forecast(company_id, year, week, run_timestamp, forecast, current_week, current_year) VALUES ({0}, {1}, {2}, {5}, {6}, {3}, {4})) result_alias").format(*data)
             spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
 
         
