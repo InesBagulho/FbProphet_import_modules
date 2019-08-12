@@ -20,12 +20,10 @@ class AML:
         self.compute_target = data["aml_compute_target"]
         aad_client_definitions = data["active_directory_client"]
         
-        mls_client = ServicePrincipalAuthentication(tenant_id=aad_client_definitions['tenant_id'],
+        self.mls_client = ServicePrincipalAuthentication(tenant_id=aad_client_definitions['tenant_id'],
                                                     service_principal_id=aad_client_definitions['client_id'],
                                                     service_principal_password=aad_client_definitions['client_secret'])
         
-        self.headers = mls_client.get_authentication_header()
-
 
         
     def get_workspace(self):
@@ -34,7 +32,7 @@ class AML:
     
         """
         ws = Workspace.get(name = self.ml_services_name, subscription_id = self.subscription_id, 
-                           resource_group = self.resource_group_name)
+                           resource_group = self.resource_group_name = self.mls_client)
         
         return ws
     
