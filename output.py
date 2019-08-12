@@ -135,9 +135,9 @@ class Output:
         
         db = DB(db_type=self.db_type)
         
-        db.cur.executemany("IF EXISTS(SELECT * FROM ml.order_forecast WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ) UPDATE ml.order_forecast SET run_timestamp = ?, forecast = ? WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ELSE INSERT INTO ml.order_forecast(company_id, year, week, run_timestamp, forecast, current_week, current_year) VALUES (?, ?, ?, ?, ?, ?, ?) ", update_data)
-        db.commit()
-        db.close()
+        query = "(IF EXISTS(SELECT * FROM ml.order_forecast WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ) UPDATE ml.order_forecast SET run_timestamp = ?, forecast = ? WHERE company_id = ? AND year = ? AND week = ? AND current_week = ? AND current_year = ? ELSE INSERT INTO ml.order_forecast(company_id, year, week, run_timestamp, forecast, current_week, current_year) VALUES (?, ?, ?, ?, ?, ?, ?)) result_alias", update_data)
+        spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
+
         
         self.model.plot(self.pred_trans)
         plt.plot(self.df['ds'], self.df['y'], 'k.')
