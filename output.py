@@ -51,7 +51,8 @@ class Output:
         domain_pred['ds'] = domain_pred['ds'] + timedelta(days=1)
     
         domain_pred['type'] = np.where(domain_pred['ds'] <= self.d_test['ds'].max(), 'test', 'fcst')
-    
+        print(domain_pred)
+
         domain_history = self.d_train[['ds', 'type']].copy()
         domain_combined = pd.concat([domain_history, domain_pred])
     
