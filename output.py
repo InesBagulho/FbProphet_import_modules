@@ -112,7 +112,7 @@ class Output:
         self.fcst_output['run_timestamp'] = pd.Timestamp.now()
         
         if self.company == 'Godtlevert':
-            self.fcst_output['company_id'] = "'09ECD4F0-AE58-4539-8E8F-9275B1859A19'"
+            self.fcst_output['company_id'] = "09ECD4F0-AE58-4539-8E8F-9275B1859A19"
         elif self.company == 'Adams Matkasse':
              self.fcst_output['company_id'] = "'8A613C15-35E4-471F-91CC-972F933331D7'"
         elif self.company == 'Linas Matkasse':
