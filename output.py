@@ -37,9 +37,9 @@ class Output:
         #Logging sizes
         print('Training data size', self.d_train.shape[0])
         print('Test data size', self.d_test.shape[0])
-        self.prepare_output()
+        fcst_output = self.prepare_output()
         
-        return self.fcst_output, self.db_type, self.model, self.pred_trans, self.df
+        return fcst_output, self.db_type, self.model, self.pred_trans, self.df
 
     def make_prediction(self):
         
@@ -121,6 +121,8 @@ class Output:
             self.fcst_output['company_id'] = "'E356EF97-15EE-44D4-9991-F50F1424949C'"
         else:
             print('Choose an existing company!')
+        
+        return self.fcst_output
         
             
             
