@@ -45,12 +45,12 @@ class Output:
         
         
         # make basis and predicted
-        domain_pred = self.model.make_future_dataframe(periods=self.d_test.shape[0] - 1 + self.weeks_to_predict
+        domain_pred = self.model.make_future_dataframe(periods=self.d_test.shape[0] + self.weeks_to_predict
                                                        , freq='W', include_history=False)
         # Adding 1 day because stupid prophet uses sunday as first day.
         domain_pred['ds'] = domain_pred['ds'] + timedelta(days=1)
     
-        domain_pred['type'] = np.where(domain_pred.index <= self.d_test.shape[0], 'test', 'fcst')
+        domain_pred['type'] = np.where(domain_pred.index <= self.d_test.shape[0] - 1, 'test', 'fcst')
         print(domain_pred)
 
         domain_history = self.d_train[['ds', 'type']].copy()
