@@ -20,9 +20,9 @@ class DB:
 
         with open(DB_SETTINGS) as filename:
             conf = json.load(filename)
-        if db_action = "read":
+        if db_action == "read":
             conf_db = conf["read_db"]
-        else if db_action = "write":
+        else if db_action == "write":
             conf_db = conf["write_db"]
             
         jdbcHostname = conf_db["host"]
