@@ -50,7 +50,7 @@ class Output:
         # Adding 1 day because stupid prophet uses sunday as first day.
         domain_pred['ds'] = domain_pred['ds'] + timedelta(days=1)
     
-        domain_pred['type'] = np.where(domain_pred.index <= self.d_test.shape[0] - 1, 'test', 'fcst')
+        domain_pred['type'] = np.where(domain_pred.index <= self.d_test['ds'].max(), 'test', 'fcst')
         print(domain_pred)
 
         domain_history = self.d_train[['ds', 'type']].copy()
