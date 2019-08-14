@@ -8,7 +8,7 @@ from pathlib import Path
 class DB:
     """ Holds the connection to the Database"""
 
-    def __init__(self, db_type):
+    def __init__(self, db_type, db_action):
         """ Connect to SQL SERVER db """
 
         if db_type == 'analytical':
@@ -20,13 +20,17 @@ class DB:
 
         with open(DB_SETTINGS) as filename:
             conf = json.load(filename)
-        
-        jdbcHostname = conf["host"]
-        jdbcDatabase = conf["dbname"]
-        jdbcPort = conf["port"]
-        jdbcUsername = conf["user"]
-        jdbcPassword = conf["passw"]
-        jdbcDriver = conf["driver"]
+        if db_action = "read":
+            conf_db = conf["read_db"]
+        else if db_action = "write":
+            conf_db = conf["write_db"]
+            
+        jdbcHostname = conf_db["host"]
+        jdbcDatabase = conf_db["dbname"]
+        jdbcPort = conf_db["port"]
+        jdbcUsername = conf_db["user"]
+        jdbcPassword = conf_db["passw"]
+        jdbcDriver = conf_db["driver"]
 
         self.jdbcUrl = "jdbc:sqlserver://{0}:{1};database={2}".format(jdbcHostname, jdbcPort, jdbcDatabase)
 
