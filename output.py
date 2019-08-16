@@ -48,7 +48,7 @@ class Output:
         domain_pred = self.model.make_future_dataframe(periods=self.d_test.shape[0] + self.weeks_to_predict
                                                        , freq='W', include_history=False)
         # Adding 1 day because stupid prophet uses sunday as first day.
-        #domain_pred['ds'] = domain_pred['ds'] + timedelta(days=1)
+        domain_pred['ds'] = domain_pred['ds'] + timedelta(days=1)
     
         domain_pred['type'] = np.where(domain_pred['ds'] <= self.d_test['ds'].max(), 'test', 'fcst')
         print(domain_pred)
