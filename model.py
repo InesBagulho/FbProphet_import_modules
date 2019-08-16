@@ -29,9 +29,9 @@ class FBModel:
     def fbmodel(self):
         
         model = self.model_fit()
-        self.save_and_register_model()
+        registered_model = self.save_and_register_model()
         
-        return model
+        return model, registered_model
         
         
     def model_fit(self):
@@ -99,7 +99,9 @@ class FBModel:
         
         timenow = datetime.now().strftime('%m-%d-%Y-%H-%M')
         
-        Model.register(model_path = self.model_path + self.model_file, # this points to a local file
+        registered_model = Model.register(model_path = self.model_path + self.model_file, # this points to a local file
                        model_name = self.model_name, # this is the name the model is registered as, am using same name for both path and name.                 
                        description = "Trained model using fbprophet at " + timenow,
                        workspace = AML().get_workspace())
+        
+        return registered_model
