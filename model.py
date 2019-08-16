@@ -28,21 +28,24 @@ class FBModel:
         
     def fbmodel(self):
         
-        registered_model = self.save_and_register_model()
-        model = self.model_fit()
+        holidays_df = self.get_holidays()
+        model = Prophet(holidays = holidays_df)
+        
+        registered_model = self.save_and_register_model(model)
+        model = self.model_fit(model)
         
         return model, registered_model
         
         
-    def model_fit(self):
+    def model_fit(self, model):
     
         """ Fit fbprophet model to the training data
     
         """
         
-        self.m.fit(self.data_train)
+        model.fit(self.data_train)
         
-        return self.m
+        return model
     
 
     def get_holidays(self):
@@ -85,17 +88,15 @@ class FBModel:
         return hdays_df
     
     
-    def save_and_register_model(self):
+    def save_and_register_model(self, model):
         
         """ 
             Saves the model locally and register's it in Azure ML Services
             
         """
-        holidays_df = self.get_holidays()
-        self.m = Prophet(holidays = holidays_df)
         
         os.makedirs(self.model_path, exist_ok=True)
-        pickle.dump(self.m, open(self.model_path + self.model_file,"wb"))
+        pickle.dump(model, open(self.model_path + self.model_file,"wb"))
         
         timenow = datetime.now().strftime('%m-%d-%Y-%H-%M')
         
