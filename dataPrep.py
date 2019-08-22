@@ -46,11 +46,11 @@ class DataPrep:
         
         query = query.format(self.company_id)
 
-        self.d = spark.read.jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
-        self.d.orderBy("delivery_year","delivery_week")
-        self.d = self.d.toPandas()
-        self.d['ds'] = pd.to_datetime(self.d['ds'])
-
+        d = spark.read.option("numPartitions", 50).jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
+        d.orderBy("delivery_year", "delivery_week")
+        self.d = d.toPandas()
+        self.d['ds'] = pd.to_datetime(self.d['ds'])    
+        self.d.sort_values(by = ['ds'])
 
     def make_model_dataframe(self, d):
     
