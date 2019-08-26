@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 class Output:
     """ Create and write output predictions. Compute training and test prediction errors. """
 
-    def __init__(self, model, d_train, d_test, df):
+    def __init__(self, company_id, model, d_train, d_test, df):
         
         with open('/dbfs/FileStore/tables/config.json') as f:
             data = json.load(f)
@@ -19,11 +19,11 @@ class Output:
         self.d_train = d_train
         self.d_test = d_test
         self.df = df
-        
+        self.company_id = company_id
+
         # All the data below is fetched from the configuration file
         self.weeks_to_predict = int(data["weeks_to_predict"])
         self.db_type = data["db_type"]
-        self.company = data["company"]
 
 
     def output(self):
@@ -112,16 +112,8 @@ class Output:
         self.fcst_output['forecast'] = np.round(self.fcst_output['yhat']).astype(int)
         self.fcst_output['run_timestamp'] = pd.Timestamp.now()
         
-        if self.company == 'Godtlevert':
-            self.fcst_output['company_id'] = "'09ECD4F0-AE58-4539-8E8F-9275B1859A19'"
-        elif self.company == 'Adams Matkasse':
-             self.fcst_output['company_id'] = "'8A613C15-35E4-471F-91CC-972F933331D7'"
-        elif self.company == 'Linas Matkasse':
-            self.fcst_output['company_id'] = "'8A613C15-35E4-471F-91CC-972F933331D7'"
-        elif self.company == 'Proviant':
-            self.fcst_output['company_id'] = "'E356EF97-15EE-44D4-9991-F50F1424949C'"
-        else:
-            print('Choose an existing company!')
+        self.fcst_output['company_id'] = self.company_id
+
         
         return self.fcst_output
         
