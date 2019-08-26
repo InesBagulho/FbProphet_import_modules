@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 class Output:
     """ Create and write output predictions. Compute training and test prediction errors. """
 
-    def __init__(self, company_id, model, d_train, d_test, df):
+    def __init__(self, weeks_to_predict, company_id, model, d_train, d_test, df):
         
         with open('/dbfs/FileStore/tables/config.json') as f:
             data = json.load(f)
@@ -20,9 +20,10 @@ class Output:
         self.d_test = d_test
         self.df = df
         self.company_id = company_id
+        self.weeks_to_predict = weeks_to_predict
+
 
         # All the data below is fetched from the configuration file
-        self.weeks_to_predict = int(data["weeks_to_predict"])
         self.db_type = data["db_type"]
 
 
