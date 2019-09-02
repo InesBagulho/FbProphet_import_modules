@@ -12,15 +12,15 @@ from FbProphet_import_modules.azureMLServices import AML
 class FBModel:
     """ Takes all actions performed to train, save and register the model """
 
-    def __init__(self, train):
+    def __init__(self, train, country):
         
         with open('/dbfs/FileStore/tables/config.json') as f:
             data = json.load(f)
         
         self.data_train = train
-        
+        self.country = country
+
         # All the data below is fetched from the configuration file
-        self.country = data["country"]
         self.model_path = data["model_path"]
         self.model_file = data["model_file"]
         self.model_name = data["model_name"]
