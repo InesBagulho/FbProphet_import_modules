@@ -6,38 +6,16 @@ from db_connector import DB
 class DataPrep:
     """ Takes all actions performed on Data """
 
-    def __init__(self, split, db_type, company):
+    def __init__(self, split, d_pandas):
         
         self.split = split
-        self.company_id = company
-        self.db_type = db_type
+        self.d_pandas = d_pandas
     
     def data_prep(self):
         
-        self.data_load()
         train, test = self.train_test_split()
         
-        return train, test, self.d_pandas
-    
-    def data_load(self):
-    
-        """ Load data into dataframe using SQL query
-    
-        """
-        
-        db = DB(db_type=self.db_type, db_action="read")
-        
-        query = """(SELECT delivery_year, delivery_week, ds, y
-                    FROM ml.input_forecast_orders 
-                    WHERE company_id = '{}') orders_alias"""
-        
-        query = query.format(self.company_id)
-
-        d = spark.read.option("numPartitions", 50).jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
-        d.orderBy("delivery_year", "delivery_week")
-        self.d_pandas = d.toPandas()
-        self.d_pandas['ds'] = pd.to_datetime(d_pandas['ds']) 
-
+        return train, test
 
     def make_model_dataframe(self, d):
     
