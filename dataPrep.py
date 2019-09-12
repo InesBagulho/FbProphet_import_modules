@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import json
 from db_connector import DB
-import spark
 
 class DataPrep:
     """ Takes all actions performed on Data """
