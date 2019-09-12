@@ -26,7 +26,7 @@ class DataPrep:
     
         """
         
-        db = DB(db_type=self.db_type)
+        db = DB(db_type=self.db_type, db_action="read")
         
         query = """(SELECT delivery_year, delivery_week, ds, y
                     FROM ml.input_forecast_orders 
