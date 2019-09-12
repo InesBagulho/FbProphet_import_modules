@@ -48,7 +48,7 @@ class DataPrep:
         
         return pd.DataFrame(data={'ds': d['ds'],
                                   'y': np.log(d['y']),
-                                  'type': d['type']})
+                                  'type': d['type'],
                                   'oddweek': np.where((d['delivery_week'] % 2) == 0, 0, 1)})
 
 
