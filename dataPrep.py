@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 from db_connector import DB
-import pyspark
+import spark
 
 class DataPrep:
     """ Takes all actions performed on Data """
@@ -34,7 +34,7 @@ class DataPrep:
         
         query = query.format(self.company_id)
 
-        d = pyspark.read.option("numPartitions", 50).jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
+        d = spark.read.option("numPartitions", 50).jdbc(url=db.jdbcUrl, table=query, properties=db.connectionProperties)
         d.orderBy("delivery_year", "delivery_week")
         self.d_pandas = d.toPandas()
         self.d_pandas['ds'] = pd.to_datetime(d_pandas['ds']) 
